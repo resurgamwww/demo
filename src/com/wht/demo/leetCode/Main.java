@@ -1,17 +1,16 @@
 package com.wht.demo.leetCode;
 
+import java.util.HashMap;
+
 /**
  * @author wanghtw
  * @date 2019/11/25 22:52
  */
 public class Main {
     public static void main(String[] args) {
-        //int[] ints = {1, 2, 3, 4, 5, 6, 7};
-        int[] ints = {4,1,2,1,2};
-
-
-        System.out.println(singleNumber(ints));
-
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int lastIndex = map.get(22);
+        System.out.println(lastIndex);
     }
 
     /**

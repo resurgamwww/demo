@@ -1,4 +1,4 @@
-package com.wht.demo.leetCode.solutions;
+package com.wht.demo.algorithm.leetCode.array;
 
 import java.util.*;
 
@@ -7,6 +7,32 @@ import java.util.*;
  * @date 2019/12/20 23:13.
  */
 public class Array {
+
+
+    /**
+     * 两数之和
+     * <p>
+     * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+     * <p>
+     * 你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+     * <p>
+     * 示例:
+     * <p>
+     * 给定 nums = [2, 7, 11, 15], target = 9
+     * <p>
+     * 因为 nums[0] + nums[1] = 2 + 7 = 9
+     * 所以返回 [0, 1]
+     *
+     * 思路：
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] twoSum(int[] nums, int target) {
+
+
+    }
 
     public int[] intersect(int[] nums1, int[] nums2) {
         //两层循环，找到一样的放到结果集里，每次找到时，需要去判断一下结果集里这个数字已经出现的次数来防止重复计算 或者 用一个map记录下外层有对应数据的数字和内层的位置，这样每次找之前先看一下外层元素是否已经在map中了，如果在的话，内层可以直接从指定的位置开始。

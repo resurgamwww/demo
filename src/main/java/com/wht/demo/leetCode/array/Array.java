@@ -1,10 +1,9 @@
-package com.wht.demo.algorithm.leetCode.array;
+package com.wht.demo.leetCode.array;
 
-import com.wht.demo.factoryDemo.factory.abstractFactory.Factory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wanghtw

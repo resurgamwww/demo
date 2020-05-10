@@ -1,7 +1,6 @@
-package com.wht.demo.algorithm.leetCode.array;
+package com.wht.demo.leetCode.array;
 
 
-import org.junit.After;
 import org.junit.Before;
 
 /**

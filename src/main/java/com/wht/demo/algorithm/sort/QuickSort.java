@@ -1,50 +1,68 @@
 package com.wht.demo.algorithm.sort;
 
+import com.wht.demo.algorithm.util.Util;
+import org.springframework.lang.NonNull;
+
 /**
- * @author wanghtw
- * @date 2019/12/26 15:15
+ * @author wht
+ * @date 2020/5/7 22:53
  */
 public class QuickSort {
 
-    /**
-     * 思路:
-     * 1.定一个基数，将数组按基数分成左右两边
-     * 2.左边从左到右遍历，比基数大的放到左边，右边从右到左循环，比基数小的放到右边
-     * 3.遍历结束后，对左右两个数组分别再次重复上述过程，直到数组中只有1个元素
-     *
-     * 这里用三值取中法，后续版本可以考虑对于长度小于10的用插入排序
-     * @param array
-     */
-    public static void quickSort(int[] array, int left , int right){
+    public static void sort(Comparable[] a) {
+        if (a == null) {
+            return;
+        }
+        sort(a, 0, a.length - 1);
+    }
 
-        if (array.length == 0){
-            return ;
+    public static void sort(Comparable[] a, int low, int high) {
+        if (a == null) {
+            return;
+        }
+        if (low >= high + 5) {
+            InsertSort.sort(a, low, high);
+            return;
         }
 
-        //取中值
-
+        int j = partition(a, low, high);
+        sort(a, low, j - 1);
+        sort(a, j + 1, high);
     }
 
-    /**
-     * 对于数组array，返回中值
-     * @param array
-     * @param left
-     * @param right
-     * @return
-     */
-    public static int getMedian(int[] array, int left , int right){
-        int median = (left + right) >> 1;
+    private static int partition(Comparable[] a, int low, int high) {
+        //数组分为a[lo...i-1],a[i],a[i+1...high]
+        int i = low, j = high + 1;
+        Comparable v = a[low];
 
-        if (array[left] > array[right]){
-            swap(array,left,right);
+        while (true) {
+            while (Util.less(a[++i], v)) {
+                if (i == high) {
+                    break;
+                }
+            }
+            while (Util.less(v, a[--j])) {
+                if (j == low) {
+                    break;
+                }
+            }
+
+            if (i >= j) {
+                break;
+            }
+
+            //交换位置
+            Comparable temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
         }
 
-        return 0;
+        //交换位置
+        Comparable temp = a[low];
+        a[low] = a[j];
+        a[j] = temp;
+
+        return j;
     }
 
-    public static void swap(int[] array, int i, int j){
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = array[i];
-    }
 }

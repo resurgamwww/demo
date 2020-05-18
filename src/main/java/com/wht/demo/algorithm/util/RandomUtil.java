@@ -15,12 +15,10 @@ public class RandomUtil {
     private static Random random = new Random();
 
     public static void shuffle(@NonNull Object[] a) {
-        int n = a.length;
-
-        for (int i = 0; i < n; i++) {
-            int j = uniform(i, n - i);
-            Object temp = a[i];
-            a[i] = a[j];
+        for (int i = a.length; i > 1; i--) {
+            int j = uniform(i);
+            Object temp = a[i - 1];
+            a[i - 1] = a[j];
             a[j] = temp;
         }
     }

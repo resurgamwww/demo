@@ -1,10 +1,10 @@
 package com.wht.demo.algorithm.sort;
 
+import com.wht.demo.algorithm.util.RandomUtil;
+import com.wht.demo.algorithm.util.Util;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author wht
@@ -19,9 +19,7 @@ public class SortTest {
 
     @After
     public void after(){
-        for (Integer integer : a) {
-            System.out.println(integer);
-        }
+        Util.print(a);
     }
 
     @Test
@@ -51,5 +49,18 @@ public class SortTest {
         }
 
         InsertSort.sort(a);
+    }
+
+    @Test
+    public void testDumpSort(){
+        a = new Integer[9];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = a.length - i;
+        }
+
+        RandomUtil.shuffle(a);
+        Util.print(a);
+
+        HeapSort.sort(a);
     }
 }

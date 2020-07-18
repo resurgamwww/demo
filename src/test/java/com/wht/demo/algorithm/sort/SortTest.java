@@ -1,66 +1,83 @@
 package com.wht.demo.algorithm.sort;
 
 import com.wht.demo.algorithm.util.RandomUtil;
-import com.wht.demo.algorithm.util.Util;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TestName;
+
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * @author wht
  * @date 2020/5/7 22:18
  */
 public class SortTest {
-    private Integer[] a;
+    //保存方法的结果
+    private Integer[] result;
+
+    //保存原始数组
+    private static Integer[] origin;
+    //保存按递增排序的正确的数组结果
+    private static Integer[] success;
+
+    @Rule
+    public TestName testName = new TestName();
+
+    @BeforeClass
+    public static void beforeClass() {
+        int length = new Random().nextInt(30);
+        origin = new Integer[length];
+        for (int i = 0; i < length; i++) {
+            origin[i] = RandomUtil.uniform(i - 5, i + 5);
+        }
+
+        RandomUtil.shuffle(origin);
+
+        success = Arrays.copyOf(origin, origin.length);
+        Arrays.sort(success);
+
+        System.out.println("before all:" + Arrays.toString(origin));
+        System.out.println("expected:" + Arrays.toString(success));
+    }
 
     @Before
-    public void before(){
+    public void before() {
+        result = Arrays.copyOf(origin, origin.length);
     }
 
     @After
-    public void after(){
-        Util.print(a);
+    public void after() throws Exception {
+        boolean flag = Arrays.equals(result, success);
+        System.out.println(testName.getMethodName() + "：" + flag);
+        if (!flag) {
+            System.out.println(Arrays.toString(result));
+
+        }
+        assert flag;
     }
 
     @Test
     public void testMergeSort() {
-        a = new Integer[]{2, 4, 1, 5, 3, 9, 4, 0};
-
-        //MergeSort.sort(a, 0, a.length - 1);
-        MergeSort.sort(a);
-
+        MergeSort.sort(result);
     }
 
     @Test
-    public void testQuickSort(){
-        a = new Integer[9];
-        for (int i = 0; i < a.length; i++) {
-            a[i] = a.length - i;
-        }
-
-        QuickSort.sort(a);
+    public void testQuickSort() {
+        QuickSort.sort(result);
     }
 
     @Test
-    public void testInsertSort(){
-        a = new Integer[9];
-        for (int i = 0; i < a.length; i++) {
-            a[i] = a.length - i;
-        }
-
-        InsertSort.sort(a);
+    public void testInsertSort() {
+        InsertSort.sort(result);
     }
 
     @Test
-    public void testDumpSort(){
-        a = new Integer[9];
-        for (int i = 0; i < a.length; i++) {
-            a[i] = a.length - i;
-        }
+    public void testDumpSort() {
+        HeapSort.sort(result);
+    }
 
-        RandomUtil.shuffle(a);
-        Util.print(a);
-
-        HeapSort.sort(a);
+    @Test
+    public void testBubbleSort() {
+        BubbleSort.bubbleSort(result);
     }
 }

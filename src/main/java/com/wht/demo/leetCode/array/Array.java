@@ -1,9 +1,6 @@
 package com.wht.demo.leetCode.array;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wanghtw
@@ -71,7 +68,7 @@ public class Array {
         }
 
 
-        //每次只挪动一个位置，时间复杂度O(N)
+        //每次只挪动一个位置，时间复杂度O(KN)
         //int last;
         //int temp;
         //for (int i = 0; i < k; i++) {
@@ -83,7 +80,7 @@ public class Array {
         //    }
         //}
 
-        //每次直接挪动K个位置
+        //每次直接挪动K个位置,时间复杂度O(N)
         int n = nums.length;
         k = k % n;
         int lastIndex = (n - k) % n;
@@ -104,6 +101,7 @@ public class Array {
                 j = count;
                 last = nums[(n + j - k) % n];
             }
+                    System.out.println(Arrays.toString(nums));
         }
 
         //第三种，反转，先将整个数组反转，然后将前K个元素反转，后N-K个元素反转

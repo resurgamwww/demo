@@ -1,16 +1,29 @@
 package com.wht.demo.leetCode;
 
-import java.util.HashMap;
-
 /**
  * @author wanghtw
  * @date 2019/11/25 22:52
  */
 public class Main {
     public static void main(String[] args) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int lastIndex = map.get(22);
-        System.out.println(lastIndex);
+        //HashMap<Integer, Integer> map = new HashMap<>();
+        //Integer lastIndex = map.get(22);
+        //System.out.println(lastIndex);
+
+        String a = "123c";
+        String def = "def";
+        String b = "123";
+        String cdef = "cdef";
+
+
+        //s.intern();
+        String s1 = "123cdef";
+        s1.intern();
+        String s = a + def;
+
+
+        //false
+        System.out.println(s == s1);
     }
 
     /**

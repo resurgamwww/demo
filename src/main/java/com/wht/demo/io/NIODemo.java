@@ -21,11 +21,8 @@ public class NIODemo {
 
         List<SocketChannel> clients = new ArrayList<>();
         while (true) {
-
             SocketChannel client = ssc.accept();
-            if(client == null){
-
-            } else {
+            if (client != null) {
                 client.configureBlocking(false);
                 clients.add(client);
             }
@@ -40,16 +37,10 @@ public class NIODemo {
                     buffer.get(bytes);
 
                     String s = new String(bytes);
-                    System.out.println(c.socket().getPort() + "s");
+                    System.out.println(c.socket().getPort() + s);
                     buffer.clear();
                 }
             }
-
-
         }
-    }
-
-    public void test(){
-
     }
 }

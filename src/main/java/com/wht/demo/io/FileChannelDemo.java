@@ -1,4 +1,4 @@
-package com.wht.demo.io.nio;
+package com.wht.demo.io;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

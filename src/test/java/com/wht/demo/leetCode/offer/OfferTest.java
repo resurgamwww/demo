@@ -331,6 +331,11 @@ public class OfferTest {
     }
 
     @Test
+    public void leftView(){
+        offer.leftView( new TreeNode(1, new TreeNode(2), new TreeNode(3, new TreeNode(4), new TreeNode(5))));
+    }
+
+    @Test
     public void main() {
 
 

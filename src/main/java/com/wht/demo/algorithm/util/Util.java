@@ -1,5 +1,6 @@
 package com.wht.demo.algorithm.util;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.google.gson.Gson;
 import org.springframework.lang.NonNull;
 
@@ -79,5 +80,11 @@ public class Util {
         sb.append("]");
 
         return sb.toString();
+    }
+
+    public void rateLimit(){
+        RateLimiter limiter = RateLimiter.create(500);
+        double v = limiter.acquire();
+
     }
 }

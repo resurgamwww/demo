@@ -5,13 +5,15 @@ import org.junit.*;
 import org.junit.rules.TestName;
 
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * @author wht
  * @date 2020/5/7 22:18
  */
 public class SortTest {
+
+    private boolean shouldReport = true;
+
     //保存方法的结果
     private Integer[] result;
 
@@ -25,7 +27,7 @@ public class SortTest {
 
     @BeforeClass
     public static void beforeClass() {
-        int length = new Random().nextInt(30);
+        int length = RandomUtil.uniform(5,50);
         origin = new Integer[length];
         for (int i = 0; i < length; i++) {
             origin[i] = RandomUtil.uniform(i - 5, i + 5);
@@ -35,9 +37,6 @@ public class SortTest {
 
         success = Arrays.copyOf(origin, origin.length);
         Arrays.sort(success);
-
-        System.out.println("before all:" + Arrays.toString(origin));
-        System.out.println("expected:" + Arrays.toString(success));
     }
 
     @Before
@@ -47,12 +46,18 @@ public class SortTest {
 
     @After
     public void after() throws Exception {
+        if (!shouldReport) return;
+
+        System.out.println("before all:" + Arrays.toString(origin));
+        System.out.println("expected:" + Arrays.toString(success));
+
         boolean flag = Arrays.equals(result, success);
         System.out.println(testName.getMethodName() + "：" + flag);
         if (!flag) {
             System.out.println(Arrays.toString(result));
 
         }
+
         assert flag;
     }
 
@@ -64,6 +69,11 @@ public class SortTest {
     @Test
     public void testQuickSort() {
         QuickSort.sort(result);
+    }
+
+    @Test
+    public void testQuickSortDemo() {
+        QuickSortDemo.sort(result);
     }
 
     @Test

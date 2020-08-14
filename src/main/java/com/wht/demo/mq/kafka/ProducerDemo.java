@@ -1,5 +1,6 @@
 package com.wht.demo.mq.kafka;
 
+import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
@@ -19,9 +20,15 @@ public class ProducerDemo {
         p.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091,localhost:9092,localhost:9093");//kafka地址，多个地址用逗号分割
         p.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         p.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        p.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, MyPartitioner.class);
         p.put(ProducerConfig.ACKS_CONFIG, "all");
         //p.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 10 * 32 * 1024 * 1024L);
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(p);
+
+        AdminClient client = AdminClient.create(p);
+
+
+
         try {
             int i = 0;
             while (true) {
@@ -29,6 +36,7 @@ public class ProducerDemo {
                 //System.out.println("开始了");
                 String s = String.valueOf(i);
                 String msg = "Hellosdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff," + s;
+                kafkaProducer.beginTransaction();
                 ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic,5,s, msg);
                 kafkaProducer.send(record);
                 kafkaProducer.send(record, new Callback() {
@@ -37,10 +45,10 @@ public class ProducerDemo {
                         System.out.printf("%d, %d, %d  \r\n", recordMetadata.partition(), recordMetadata.offset(), recordMetadata.serializedValueSize());
                     }
                 });
-                //kafkaProducer.flush();
+                kafkaProducer.flush();
                 //System.out.println("cost:" + (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - begin)));
                 System.out.println("消息发送成功:");
-
+                kafkaProducer.commitTransaction();
                 Thread.sleep(20);
             }
         } catch (InterruptedException e) {
@@ -48,5 +56,11 @@ public class ProducerDemo {
         } finally {
             kafkaProducer.close();
         }
+    }
+
+    public void transaction(){
+
+
+
     }
 }

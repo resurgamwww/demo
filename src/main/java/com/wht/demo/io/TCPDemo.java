@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 public class TCPDemo {
     public static void main(String[] args) throws IOException {
         String ip="localhost";   //服务器端ip地址
-        int port=9090;        //端口号
+        int port=8080;        //端口号
         Socket sck=new Socket(ip,port);
         //2.传输内容
         String content="what the fuck";

@@ -1,4 +1,4 @@
-package com.wht.demo.io.nio;
+package com.wht.demo.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * desc.
@@ -53,5 +54,14 @@ public class AIODemo {
 
         channelA.close();
         channelB.close();
+
+        ThreadLocal<String> local = new ThreadLocal<String>();
+        local.set("");
+        String s = local.get();
+        local.remove();
+
+        AtomicInteger atomicInteger = new AtomicInteger(2);
+        atomicInteger.incrementAndGet();
+
     }
 }

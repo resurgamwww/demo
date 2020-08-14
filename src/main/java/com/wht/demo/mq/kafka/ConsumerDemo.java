@@ -3,10 +3,13 @@ package com.wht.demo.mq.kafka;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * desc.
@@ -15,7 +18,7 @@ import java.util.Properties;
  */
 public class ConsumerDemo {
 
-    static  final  String topic = "test";
+    static final String topic = "test";
 
     public static void main(String[] args) {
         Properties props = new Properties();
@@ -33,9 +36,9 @@ public class ConsumerDemo {
 
         consumer.subscribe(Collections.singletonList(topic));
 
-        ConsumerRecords<String, String> msgList=consumer.poll(1000);
+        ConsumerRecords<String, String> msgList = consumer.poll(Duration.ofSeconds(2));
 
-        if (msgList == null){
+        if (msgList == null) {
             System.out.println("list为空");
         }
 
@@ -43,7 +46,22 @@ public class ConsumerDemo {
             System.out.println(record.key() + ":" + record.value());
         }
 
-        consumer.close();
+        Set<TopicPartition> partitionSet = consumer.assignment();
 
+        for (ConsumerRecord<String, String> record : msgList) {
+            long l = record.offset();
+            int partition = record.partition();
+
+            for (TopicPartition topicPartition : partitionSet) {
+                if (topicPartition.partition() == partition){
+
+                    //从指定partition的指定offset开始消费
+                    consumer.seek(topicPartition,l);
+                }
+            }
+        }
+
+
+        consumer.close();
     }
 }

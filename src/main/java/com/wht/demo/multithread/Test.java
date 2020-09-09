@@ -50,6 +50,11 @@ public class Test<T> extends CompletableFuture<T>{
     public static ReentrantLock lock = new ReentrantLock();
 
     public static void main(String[] args) throws InterruptedException {
+        Integer integer = 2;
+        Double d = 2.0;
+
+        System.out.println(d.intValue() == integer);
+
         //Semaphore count = new Semaphore(1);
         //Thread thread = new Thread(new TestThread(count), "测试类");
         //thread.start();

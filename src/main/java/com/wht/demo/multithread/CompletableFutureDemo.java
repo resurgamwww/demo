@@ -90,6 +90,10 @@ public class CompletableFutureDemo {
         return i;
     }
 
+    private int get(CompletableFutureDemo a){
+        return a.i.get();
+    }
+
     private int getIdFormClassA(ClassA a) {
         if (a == null) return 0;
         System.out.println("getId," + a.id);

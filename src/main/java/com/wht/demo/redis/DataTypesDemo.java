@@ -17,7 +17,7 @@ public class DataTypesDemo {
     static String listName = "myList";
     static String listName2 = "myList2";
 
-    public void lists(){
+    public void lists() {
         jedis.lpush(listName, "1", "2", "3", "4");
         jedis.lpush(listName2, "1", "2", "3", "4");
 
@@ -32,9 +32,9 @@ public class DataTypesDemo {
         jedis.del(listName2);
     }
 
-    public void strings(){
-        jedis.set("key","val");
-        jedis.setex("key",10,"new val");
+    public void strings() {
+        jedis.set("key", "val");
+        jedis.setex("key", 10, "new val");
 
         String s = jedis.get("key");
         System.out.println(s);
@@ -54,35 +54,40 @@ public class DataTypesDemo {
         System.out.println(jedis.info("memory"));
     }
 
-    public void sets(){
-        jedis.sadd("key","members");
+    public void sets() {
+        jedis.sadd("key", "members");
 
         Set<String> set = jedis.smembers("key");
 
         System.out.println(Arrays.toString(set.toArray()));
 
-        jedis.srem("key","members");
+        jedis.srem("key", "members");
 
         Set<String> set2 = jedis.smembers("key");
         System.out.println(Arrays.toString(set2.toArray()));
     }
 
-    public void zSets(){
+    public void testHash() {
+        String key = "hash";
+        jedis.hset(key, "field1", "value");
+    }
+
+    public void zSets() {
         String key = "zSets";
-        jedis.zadd(key,0,"alan");
-        jedis.zadd(key,0,"ab");
-        jedis.zadd(key,0,"ac");
-        jedis.zadd(key,0,"ad");
-        jedis.zadd(key,0,"ae");
-        jedis.zadd(key,0,"af");
-        jedis.zadd(key,0,"ba");
-        jedis.zadd(key,0,"bc");
-        jedis.zadd(key,0,"bd");
-        jedis.zadd(key,0,"ca");
-        jedis.zadd(key,0,"cb");
-        jedis.zadd(key,0,"cc");
-        jedis.zadd(key,0,"cd");
-        jedis.zadd(key,0,"ce");
+        jedis.zadd(key, 0, "alan");
+        jedis.zadd(key, 0, "ab");
+        jedis.zadd(key, 0, "ac");
+        jedis.zadd(key, 0, "ad");
+        jedis.zadd(key, 0, "ae");
+        jedis.zadd(key, 0, "af");
+        jedis.zadd(key, 0, "ba");
+        jedis.zadd(key, 0, "bc");
+        jedis.zadd(key, 0, "bd");
+        jedis.zadd(key, 0, "ca");
+        jedis.zadd(key, 0, "cb");
+        jedis.zadd(key, 0, "cc");
+        jedis.zadd(key, 0, "cd");
+        jedis.zadd(key, 0, "ce");
 
         Set<String> set = jedis.zrange(key, 0, -1);
         System.out.println(Arrays.toString(set.toArray()));
@@ -105,7 +110,7 @@ public class DataTypesDemo {
         jedis.close();
     }
 
-    public static class FooBar{
+    public static class FooBar {
         public long id;
         public String name;
         public String desc;

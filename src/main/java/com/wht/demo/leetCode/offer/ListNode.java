@@ -6,7 +6,7 @@ package com.wht.demo.leetCode.offer;
  * @author wht
  */
 public class ListNode {
-    int val;
+    public int val;
     ListNode next;
 
     public ListNode(int x) {

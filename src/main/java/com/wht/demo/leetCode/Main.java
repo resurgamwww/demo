@@ -1,5 +1,10 @@
 package com.wht.demo.leetCode;
 
+import com.wht.demo.leetCode.offer.ListNode;
+import com.wht.demo.leetCode.offer.TreeNode;
+
+import java.util.*;
+
 /**
  * @author wanghtw
  * @date 2019/11/25 22:52
@@ -92,7 +97,7 @@ public class Main {
             return nums[0];
         }
         int result = 0;
-        for (int i = 0; i < nums.length -1; i++) {
+        for (int i = 0; i < nums.length - 1; i++) {
             result = nums[i] ^ result;
 
         }
@@ -100,4 +105,342 @@ public class Main {
         return result;
     }
 
+    /**
+     * 给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
+     * <p>
+     * https://leetcode-cn.com/problems/repeated-substring-pattern/
+     *
+     * @param s
+     * @return
+     */
+    public boolean repeatedSubstringPattern(String s) {
+        if (s == null || s.length() <= 1 || s.length() % 2 != 0) {
+            return false;
+        }
+
+        //KMP算法，构建一个DFA
+        //如果
+
+        int state = 0;
+        int last = 0;
+        int[][] dfa = new int[128][s.length() / 2];
+
+        //先过一遍，每次状态+1，如果发现当前字符等于首字符，记录当前位置，开始尝试从头沿着DFA走，
+        for (int i = 0; i < s.length() / 2; i++) {
+
+        }
+
+        return true;
+    }
+
+    /**
+     * 在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。
+     * 移动顺序由字符串表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。
+     * 注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/robot-return-to-origin
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param moves
+     * @return
+     */
+    public boolean judgeCircle(String moves) {
+        int i = 0, j = 0;
+        for (byte b : moves.getBytes()) {
+            switch (b) {
+                case 'R':
+                    j += 1;
+                    break;
+                case 'L':
+                    j -= 1;
+                    break;
+                case 'U':
+                    i -= 1;
+                    break;
+                case 'D':
+                    i += 1;
+                    break;
+                default:
+                    return false;
+            }
+        }
+
+        return i == 0 && j == 0;
+    }
+
+    public String reverseWords(String s) {
+        char[] chars = new char[s.length()];
+
+        int begin = 0;
+        boolean isLastBlank = false;
+        for (int i = 0; i < chars.length; i++) {
+            char c = s.charAt(i);
+            if (c == ' ') {
+                if (!isLastBlank) {
+                    //上一个不是空，当前为空，则从begin到i-1位置是一个单词，复制进去
+                    for (int j = begin; j < i; j++) {
+                        chars[j] = s.charAt(i - 1 - (j - begin));
+                    }
+
+                    isLastBlank = true;
+                }
+
+                chars[i] = ' ';
+            } else {
+                if (isLastBlank) begin = i;
+
+                isLastBlank = false;
+            }
+
+        }
+        if (!isLastBlank) {
+            //上一个不是空，当前为空，则从begin到i-1位置是一个单词，复制进去
+            for (int j = begin; j < s.length(); j++) {
+                chars[j] = s.charAt(s.length() - 1 - (j - begin));
+            }
+
+        }
+        return new String(chars);
+    }
+
+    boolean[] vis;
+    int nums = 0;
+    List<List<Integer>> rooms;
+
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        vis = new boolean[rooms.size()];
+        this.rooms = rooms;
+
+        dfsForCanVisitAllRooms(0);
+
+        return nums == rooms.size();
+    }
+
+    public void dfsForCanVisitAllRooms(int room) {
+        if (vis[room]) return;
+
+        vis[room] = true;
+        nums++;
+
+        rooms.get(room).forEach(this::dfsForCanVisitAllRooms);
+
+    }
+
+    List<String> list = new ArrayList<>();
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        //dfs，用字符串保存路径
+        if (root == null) {
+            return list;
+        }
+
+        dfs(new StringBuilder(), root);
+
+        return list;
+    }
+
+    public void dfs(StringBuilder sb, TreeNode node) {
+        if (node == null) {
+            return;
+        }
+
+        StringBuilder builder = new StringBuilder(sb);
+        builder.append(node.val);
+
+        if (node.left == null && node.right == null) {
+            //叶子节点则提交
+            list.add(builder.toString());
+        } else {
+            builder.append("->");
+
+            dfs(builder, node.left);
+            dfs(builder, node.right);
+        }
+    }
+
+    /**
+     * 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
+     * <p>
+     * 如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+     * <p>
+     * 您可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+     * <p>
+     * 示例：
+     * <p>
+     * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+     * 输出：7 -> 0 -> 8
+     * 原因：342 + 465 = 807
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/add-two-numbers
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int temp = 0;
+
+        int i1 = l1.val;
+
+
+        return null;
+    }
+
+    /**
+     * 给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        //todo wanght 2020/9/7 10:27 做优化
+        //1. 用堆的时间复杂度是O(NlogN)。用Java中自带的堆会有一些额外的开销，因为不支持固定长度，需要自己手动remove，优化思路是自己实现一个堆，在其中记录最大和最小值，放之前直接指定size，放之前比较一下即可。
+        //2. 用快排的思路，只对最大的那部分排序即可。平均时间复杂度是O(N)，但是缺点是排序时需要有所有的结果集。
+
+        //首先统计出现的频率
+        HashMap<Integer, Integer> map = new HashMap<>(nums.length);
+        for (int i : nums) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+
+        return topKFrequentWithHeap(k, map);
+    }
+
+    private int[] topKFrequentWithHeap(int k, HashMap<Integer, Integer> map) {
+        //对频率排序，利用Java中的优先级队列，默认是个小顶堆
+        //用小顶堆实现大顶堆，当堆的size < k时，放进去，当size >= k时，放进去之后remove掉头部，最后返回队列的逆序即可
+        PriorityQueue<int[]> queue = getTopKQueueWithHeap(k, map);
+
+        int[] result = new int[k];
+        for (int i = result.length - 1; i >= 0; i--) {
+            result[i] = queue.remove()[0];
+        }
+
+        return result;
+    }
+
+    private PriorityQueue<int[]> getTopKQueueWithHeap(int k, HashMap<Integer, Integer> map) {
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+
+            if (queue.size() >= k) {
+                if (queue.peek()[1] >= value) {
+                    continue;
+                } else {
+                    queue.remove();
+                }
+            }
+            queue.add(new int[]{key, value});
+        }
+        return queue;
+    }
+
+    private int[] topKFrequentWithPartition(int k, HashMap<Integer, Integer> map) {
+        //利用分治法，类似快排，但是只需要对较大的那部分排序
+        int[] result = new int[k];
+
+
+        return result;
+    }
+
+    /**
+     * 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        ArrayList<List<Integer>> list = new ArrayList<>();
+
+        dfsForCombine(n, k, 1, new ArrayDeque<>(), list);
+        return list;
+    }
+
+    public void dfsForCombine(int n, int k, int begin, Deque<Integer> path, ArrayList<List<Integer>> list) {
+        if (path.size() == k) {
+            list.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = begin; i <= n - k + 1; i++) {
+            path.add(i);
+            dfsForCombine(n, k, i + 1, path, list);
+            path.removeLast();
+        }
+    }
+
+    /**
+     * 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+     * <p>
+     * candidates 中的数字可以无限制重复被选取。
+     * <p>
+     * 说明：
+     * <p>
+     * 所有数字（包括 target）都是正整数。
+     * 解集不能包含重复的组合。
+     * 示例 1：
+     * <p>
+     * 输入：candidates = [2,3,6,7], target = 7,
+     * 所求解集为：
+     * [
+     * [7],
+     * [2,2,3]
+     * ]
+     * 示例 2：
+     * <p>
+     * 输入：candidates = [2,3,5], target = 8,
+     * 所求解集为：
+     * [
+     * [2,2,2,2],
+     * [2,3,3],
+     * [3,5]
+     * ]
+     * <p>
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= candidates.length <= 30
+     * 1 <= candidates[i] <= 200
+     * candidate 中的每个元素都是独一无二的。
+     * 1 <= target <= 500
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+
+        Arrays.sort(candidates);
+
+        //类似上一道题，但是这道的区别在于i本身可以重复，递归时，如果总和=target，就加入结果集，如果遍历到尾部还不满足或者总和>target，就结束循环。
+        //反向思考，f(n) = candidates[i] + f(n - candidates[i])，因为不能有重复的，表示i可以从0开始不断增加，并且i不会再减小
+
+        ArrayList<List<Integer>> list = new ArrayList<>();
+        dfs(candidates, target, 0, new ArrayDeque<Integer>(), list);
+        return list;
+    }
+
+    public void dfs(int[] candidates, int target, int begin, Deque<Integer> path, ArrayList<List<Integer>> list) {
+        if (target < 0) {
+            return;
+        }
+
+        if (target == 0) {
+            list.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = begin; i < candidates.length; i++) {
+            if (target < candidates[i]) {
+                break;
+            }
+            path.add(candidates[i]);
+            dfs(candidates, target - candidates[i], i, path, list);
+            path.removeLast();
+        }
+    }
 }

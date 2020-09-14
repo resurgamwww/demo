@@ -443,4 +443,74 @@ public class Main {
             path.removeLast();
         }
     }
+
+    /**
+     * 给定一个二叉树，返回它的中序 遍历。
+     *
+     * @param root 根节点
+     * @return 中序遍历
+     */
+    public List<Integer> inorderTraversalWithRecursion(TreeNode root) {
+        //中序遍历:先看左子节点，然后看根节点，最后看右子节点。递归很简单，就不写了。尝试下递归。
+        ArrayList<Integer> list = new ArrayList<>();
+
+        inorderTraversalWithRecursion(root, list);
+        return list;
+
+
+    }
+
+    public void inorderTraversalWithRecursion(TreeNode node, List<Integer> list) {
+
+        if (node == null) {
+            return;
+        }
+
+        if (node.left != null) {
+            inorderTraversalWithRecursion(node.left, list);
+        }
+
+        list.add(node.val);
+
+        if (node.right != null) {
+            inorderTraversalWithRecursion(node.right, list);
+        }
+    }
+
+    public List<Integer> inorderTraversalWithIteration(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<>();
+
+        Stack<TreeNode> stack = new Stack<>();
+
+        TreeNode node = root;
+
+        label : while (node != null) {
+
+            if (node.left != null) {
+                stack.add(node);
+                node = node.left;
+                continue;
+            }
+
+            list.add(node.val);
+
+            if (node.right != null) {
+                node = node.right;
+                continue;
+            }
+
+
+            while (!stack.empty()){
+                node = stack.pop();
+                list.add(node.val);
+                if (node.right != null) {
+                    node = node.right;
+                    continue label;
+                }
+            }
+            break;
+        }
+
+        return list;
+    }
 }

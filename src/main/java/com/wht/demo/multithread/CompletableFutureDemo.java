@@ -1,9 +1,13 @@
 package com.wht.demo.multithread;
 
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.AtomicDouble;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * 创建对象
@@ -16,7 +20,7 @@ public class CompletableFutureDemo {
     private AtomicInteger i = new AtomicInteger();
     private AtomicDouble j = new AtomicDouble();
 
-    private ThreadPoolExecutor executor = new ThreadPoolExecutor(0, 40, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1));
+
 
     public static void main(String[] args) {
         CompletableFutureDemo demo = new CompletableFutureDemo();
@@ -26,6 +30,9 @@ public class CompletableFutureDemo {
             System.out.println(System.currentTimeMillis() + ",抛出了异常");
         }
     }
+
+    private ThreadPoolExecutor executor = new ThreadPoolExecutor(0, 40, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1));
+    
 
     private void testCreate() throws ExecutionException, InterruptedException {
         long startTime = System.currentTimeMillis();

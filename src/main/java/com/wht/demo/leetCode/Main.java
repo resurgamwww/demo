@@ -2,8 +2,12 @@ package com.wht.demo.leetCode;
 
 import com.wht.demo.leetCode.offer.ListNode;
 import com.wht.demo.leetCode.offer.TreeNode;
+import org.springframework.core.annotation.MergedAnnotationPredicates;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 /**
  * @author wanghtw
@@ -484,7 +488,8 @@ public class Main {
 
         TreeNode node = root;
 
-        label : while (node != null) {
+        label:
+        while (node != null) {
 
             if (node.left != null) {
                 stack.add(node);
@@ -500,7 +505,7 @@ public class Main {
             }
 
 
-            while (!stack.empty()){
+            while (!stack.empty()) {
                 node = stack.pop();
                 list.add(node.val);
                 if (node.right != null) {
@@ -512,5 +517,86 @@ public class Main {
         }
 
         return list;
+    }
+
+    /**
+     * 给你一个整数数组 arr，请你帮忙统计数组中每个数的出现次数。
+     * <p>
+     * 如果每个数的出现次数都是独一无二的，就返回 true；否则返回 false。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：arr = [1,2,2,1,1,3]
+     * 输出：true
+     * 解释：在该数组中，1 出现了 3 次，2 出现了 2 次，3 只出现了 1 次。没有两个数的出现次数相同。
+     * 示例 2：
+     * <p>
+     * 输入：arr = [1,2]
+     * 输出：false
+     * 示例 3：
+     * <p>
+     * 输入：arr = [-3,0,1,-3,1,1,1,-3,10,0]
+     * 输出：true
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= arr.length <= 1000
+     * -1000 <= arr[i] <= 1000
+     * <p>
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/unique-number-of-occurrences
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     */
+    public boolean uniqueOccurrences(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return true;
+        }
+
+        List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
+        Map<Integer, Integer> map = list.parallelStream().collect(Collectors.toMap(w -> w, w -> 1, Integer::sum));
+
+        HashMap<Integer, Integer> result = new HashMap<>(map.size());
+
+        for (Integer i : map.values()) {
+            if (result.containsKey(i)) {
+                return false;
+            } else {
+                result.put(i, 1);
+            }
+        }
+
+        return true;
+    }
+
+
+    int sum = 0;
+
+    /**
+     * 每个节点是一个数字，从根节点到叶子节点的路径会组成一个数字，求所有数字之和
+     * <p>
+     * 解题思路：DFS OR BFS，然后将所有数字相加即可
+     */
+    public int sumNumbers(TreeNode root) {
+        if (root == null) return 0;
+        dfs(root, 0);
+        return sum;
+    }
+
+    public void dfs(TreeNode node, int num) {
+        num = (num << 3) + (num << 1) + node.val;
+
+        if (node.left != null) {
+            dfs(node.left, num);
+        }
+        if (node.right != null) {
+            dfs(node.right, num);
+        }
+        if (node.left == null && node.right == null){
+            sum += num;
+        }
     }
 }

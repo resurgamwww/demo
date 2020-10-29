@@ -54,4 +54,15 @@ public class MainTest {
 
         System.out.println(list);
     }
+
+    @Test
+    public void testUniqueOccurrences(){
+
+        main.uniqueOccurrences(new int[]{1,2,2,3,3,3,4,5,5,6,6,6});
+    }
+
+    @Test
+    public void testSumNumbers(){
+        main.sumNumbers(new TreeNode(1,new TreeNode(2 ), new TreeNode(3)));
+    }
 }

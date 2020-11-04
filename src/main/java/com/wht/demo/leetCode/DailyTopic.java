@@ -2,6 +2,7 @@ package com.wht.demo.leetCode;
 
 import com.wht.demo.leetCode.offer.ListNode;
 import com.wht.demo.leetCode.offer.TreeNode;
+import org.checkerframework.common.value.qual.IntVal;
 import org.springframework.core.annotation.MergedAnnotationPredicates;
 
 import java.lang.reflect.Array;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  * @author wanghtw
  * @date 2019/11/25 22:52
  */
-public class Main {
+public class DailyTopic {
     public static void main(String[] args) {
         //HashMap<Integer, Integer> map = new HashMap<>();
         //Integer lastIndex = map.get(22);
@@ -595,8 +596,128 @@ public class Main {
         if (node.right != null) {
             dfs(node.right, num);
         }
-        if (node.left == null && node.right == null){
+        if (node.left == null && node.right == null) {
             sum += num;
         }
+    }
+
+    /**
+     * 有效的山脉数组
+     * <p>
+     * 给定一个整数数组 A，如果它是有效的山脉数组就返回 true，否则返回 false。
+     * <p>
+     * 让我们回顾一下，如果 A 满足下述条件，那么它是一个山脉数组：
+     * <p>
+     * A.length >= 3
+     * 在 0 < i < A.length - 1 条件下，存在 i 使得：
+     * A[0] < A[1] < ... A[i-1] < A[i]
+     * A[i] > A[i+1] > ... > A[A.length - 1]
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/valid-mountain-array
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param A
+     * @return
+     */
+    public boolean validMountainArray(int[] A) {
+        //其实就是要求必须有一个极大值A[i]，且0<i<A.length() -1
+
+        //所以思路也很简单，先判断每个值是不是比前一个值大，如果是的话就继续，直到找到一个极大值，如果到数组尾部还没找到，返回false，之后判断每个值是不是比前一个值小，否则返回false，如果到了数组尾部，返回true
+
+        int length = A.length;
+        //处理特殊情况
+        if (length < 3) {
+            return false;
+        }
+        if (A[0] > A[1]) {
+            return false;
+        }
+        if (A[length - 1] > A[length - 2]) {
+            return false;
+        }
+
+        int i;
+        boolean down = false;
+        for (i = 1; i < length - 1; i++) {
+            if (A[i] > A[i + 1]) {
+                down = true;
+                break;
+            }
+        }
+        if (down) {
+            for (int j = i + 1; j < length - 1; j++) {
+                if (A[j] >= A[j - 1]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 给出一个无重叠的 ，按照区间起始端点排序的区间列表。
+     * <p>
+     * 在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+     *
+     * @param intervals
+     * @param newInterval
+     * @return
+     */
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        if (intervals == null || intervals.length == 0 || (intervals.length == 1 && intervals[0].length == 0)) {
+            return new int[][]{newInterval};
+        }
+        if (newInterval == null || newInterval.length == 0) {
+            return intervals;
+        }
+
+        ArrayList<int[]> list = new ArrayList<>(intervals.length + 1);
+
+        boolean flag = false;
+        for (int i = 0, intervalsLength = intervals.length; i < intervalsLength; i++) {
+            int[] interval = intervals[i];
+            //设当前区间为A，新区间为B，有几种情况：
+            //1. A在B左侧，无交集，continue；
+            //2. B在A左侧，无交集，将B插入A之前，break；
+            //3. A与B有交集：A的左边界小于B的右边界，但是A的右边界大于等于B的左边界，A在左，B在右；
+            //4. A与B有交集：B的左边界小于A的右边界，但是B的右边界大于等于A的左边界，B在左，A在右；
+            //5. A与B完全重合，不处理；
+            //思路：为了方便扩容，弄一个新的List来存结果集
+            //遍历原始集合，
+            //A在B左侧
+            if (flag){
+                list.add(interval);
+                continue;
+            }
+
+            if (interval[1] < newInterval[0]) {
+                list.add(interval);
+                continue;
+            }
+            //B在A左侧，插入
+            if (interval[0] > newInterval[1]) {
+                flag = true;
+                list.add(newInterval);
+                list.add(interval);
+                continue;
+            }
+            //如果A与B完全重合
+            if (interval[0] == newInterval[0] && interval[1] == newInterval[1]) {
+                flag = true;
+                list.add(interval);
+                continue;
+            }
+            //如果A与B有交叉则合并，找到四个值中的最小值和最大值作为新的区间。
+            int min = Math.min(interval[0], Math.min(interval[1], Math.min(newInterval[0], newInterval[1])));
+            int max = Math.max(interval[0], Math.max(interval[1], Math.max(newInterval[0], newInterval[1])));
+            newInterval[0] = min;
+            newInterval[1] = max;
+        }
+        if (!flag) {
+            list.add(newInterval);
+        }
+        return list.toArray(new int[0][]);
     }
 }

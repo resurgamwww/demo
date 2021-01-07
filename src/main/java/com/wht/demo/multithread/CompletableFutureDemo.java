@@ -1,13 +1,10 @@
 package com.wht.demo.multithread;
 
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.AtomicDouble;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 /**
  * 创建对象
@@ -21,18 +18,49 @@ public class CompletableFutureDemo {
     private AtomicDouble j = new AtomicDouble();
 
 
-
     public static void main(String[] args) {
         CompletableFutureDemo demo = new CompletableFutureDemo();
         try {
-            demo.testCreate();
+//            demo.testCreate();
+            demo.test();
         } catch (ExecutionException | InterruptedException e) {
             System.out.println(System.currentTimeMillis() + ",抛出了异常");
         }
     }
 
+    private void test() throws ExecutionException, InterruptedException {
+
+        ArrayList<CompletableFuture<Integer>> futures = new ArrayList<>(10);
+        for (int i = 1; i <= 10; i++) {
+            int tid = i;
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return 20;
+            }).whenComplete((result, exception) -> {
+                if (exception != null) {
+                    exception.printStackTrace();
+                }
+                if (result != null) {
+                    System.out.println(result);
+                }
+            }));
+        }
+
+        CompletableFuture<Void> result = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+        System.out.println("sdfsdf");
+        result.join();
+        result.whenComplete((v,e ) -> {
+            System.out.println(v);
+            System.out.println(e);
+        });
+    }
+
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(0, 40, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1));
-    
+
 
     private void testCreate() throws ExecutionException, InterruptedException {
         long startTime = System.currentTimeMillis();
@@ -97,7 +125,7 @@ public class CompletableFutureDemo {
         return i;
     }
 
-    private int get(CompletableFutureDemo a){
+    private int get(CompletableFutureDemo a) {
         return a.i.get();
     }
 
